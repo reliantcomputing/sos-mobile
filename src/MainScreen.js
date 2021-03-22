@@ -2,6 +2,8 @@ import React, {Fragment, useEffect} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
+import {StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RouteNames} from './helpers/RouteNames';
 import {Chats} from './Chats';
@@ -11,6 +13,8 @@ import {Basket} from './Basket';
 import {joinChannels} from './redux-helpers/actions/ChannelAction';
 
 import {useDispatch, useSelector} from 'react-redux';
+import {UPDATES} from './redux-helpers/Types';
+import Constants from './helpers/constants';
 
 const Tab = createBottomTabNavigator();
 
@@ -20,10 +24,47 @@ const MainScreen = () => {
   const basket = useSelector(state => state.basket);
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
+  const update = useSelector(state => state.update);
+
+  const alert = message => {
+    Alert.alert(
+      'Info',
+      message,
+      [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
 
   useEffect(() => {
     dispatch(joinChannels());
   }, []);
+
+  useEffect(() => {
+    if (update === Constants.UPDATE.ORDER_REJECTED) {
+      alert('Your has been rejected');
+      dispatch({
+        type: UPDATES,
+        payload: '',
+      });
+    } else if (update === Constants.UPDATE.ORDER_APPROVED) {
+      alert('Your has been approved.');
+      dispatch({
+        type: UPDATES,
+        payload: '',
+      });
+    } else if (update === Constants.UPDATE.ORDER_PLACED) {
+      alert('Your has been placed successfully.');
+      dispatch({
+        type: UPDATES,
+        payload: '',
+      });
+    }
+  }, [update]);
 
   return (
     <Fragment>

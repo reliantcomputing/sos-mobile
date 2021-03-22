@@ -2,9 +2,11 @@ import React from 'react';
 import {View, Text, Image, Button, Dimensions, StyleSheet} from 'react-native';
 
 import {SimpleStepper} from 'react-native-simple-stepper';
+import {useDispatch, useSelector} from 'react-redux';
+import {PLACING_ORDER} from '../redux-helpers/Types';
 const screenWidth = Dimensions.get('window').width;
 
-const PageCard = ({item, qty, qtyChanged, addToCart}) => {
+const PageCard = ({item, qty, qtyChanged, addToCart, items}) => {
   const {id, image, price} = item;
   return (
     <View style={styles.wrapper}>
@@ -45,8 +47,12 @@ const PageCard = ({item, qty, qtyChanged, addToCart}) => {
           onPress={() => {
             addToCart(item, qty);
           }}
-          title="Add to Basket"
-          color="#c53c3c"
+          title={
+            items.find(_item => _item.id === item.id)
+              ? 'Update Menu'
+              : 'Add to Basket'
+          }
+          color="orange"
         />
       </View>
     </View>

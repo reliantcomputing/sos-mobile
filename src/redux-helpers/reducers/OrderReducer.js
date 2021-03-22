@@ -5,6 +5,6 @@ export const OrderReducer = (state = {}, action) => {
     case SET_ORDER:
       return action.payload;
     default:
-      break;
+      return state;
   }
 };

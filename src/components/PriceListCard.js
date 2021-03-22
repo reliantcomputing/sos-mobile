@@ -2,12 +2,9 @@ import React from 'react';
 import {TouchableOpacity, View, Image, Text, StyleSheet} from 'react-native';
 import {RouteNames} from '../helpers/RouteNames';
 import {useNavigation} from '@react-navigation/core';
-import {useSelector} from 'react-redux';
 
-const ListCard = ({item, item_type}) => {
+const PriceListCard = ({item, item_type}) => {
   const navigation = useNavigation();
-  const extras = useSelector(state => state.basket.extras);
-  const menus = useSelector(state => state.basket.menus);
   return (
     <TouchableOpacity
       onPress={() => {
@@ -16,7 +13,6 @@ const ListCard = ({item, item_type}) => {
           item: item,
           item_type: item_type,
           title: item.title,
-          items: item_type === 'MENU' ? menus : extras,
         });
       }}>
       <View style={styles.wrapper}>
@@ -25,8 +21,9 @@ const ListCard = ({item, item_type}) => {
         </View>
         <View>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.description}>{item.description}</Text>
+          <Text style={styles.description}>Qty: {item.qty}</Text>
           <Text style={styles.subtitle}>R{item.price}</Text>
+          <Text style={styles.subtitle}>Cost: R{item.price * item.qty}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -63,4 +60,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ListCard;
+export default PriceListCard;

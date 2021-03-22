@@ -6,12 +6,12 @@ import Constants from './helpers/constants';
 import {BASKET_ADD_EXTRA, BASKET_ADD_MENU} from './redux-helpers/Types';
 import {Header, Button} from 'react-native-elements';
 
-export const MenuDetails = ({route}) => {
-  const basket = useSelector(state => state.basket);
+export const ItemDetails = ({route}) => {
   const menu = route.params.item;
+  const items = route.params.items;
+  const item_type = route.params.item_type;
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
-  const orderChannel = useSelector(state => state.channels.orderChannel);
   console.log(useSelector(state => state.channels));
 
   const basketButton = <Button />;
@@ -23,17 +23,18 @@ export const MenuDetails = ({route}) => {
 
   const addToCart = (_item, qty) => {
     const item = {..._item, qty: qty};
-    dispatch({
-      type: BASKET_ADD_EXTRA,
-      payload: item,
-    });
 
-    const order = {
-      ...basket,
-      sit_number: '1',
-      order: {rejected_reason: 'Tedd', status: 'PLACED'},
-    };
-    orderChannel.push(`place:order`, order);
+    if (item_type === 'MENU') {
+      dispatch({
+        type: BASKET_ADD_MENU,
+        payload: item,
+      });
+    } else {
+      dispatch({
+        type: BASKET_ADD_EXTRA,
+        payload: item,
+      });
+    }
   };
 
   return (
@@ -41,6 +42,7 @@ export const MenuDetails = ({route}) => {
       <PageCard
         item={menu}
         qty={qty}
+        items={items}
         qtyChanged={qtyChanged}
         addToCart={addToCart}
       />

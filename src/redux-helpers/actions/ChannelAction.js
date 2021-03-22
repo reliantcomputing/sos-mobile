@@ -2,9 +2,10 @@ import {Socket} from 'phoenix';
 import Store from '../Store';
 import Constants from '../../helpers/constants';
 import {
-  ADD_ORDER,
+  PLACING_ORDER,
   ADD_PENDING_CHATS,
   LOAD_CHANNELS,
+  UPDATES,
   UPDATE_ORDER,
 } from '../Types';
 
@@ -21,36 +22,64 @@ export const joinChannels = () => {
 
   orderChannel.on('place:order', payload => {
     console.log('Order placed');
+    Store.dispatch({
+      type: UPDATES,
+      payload: Constants.UPDATE.ORDER_PLACED,
+    });
+    Store.dispatch({
+      type: PLACING_ORDER,
+      payload: false,
+    });
     axios
-      .get(`${Constants.BASE_URL}orders/${payload.id}`)
+      .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
       .then(res => {
         console.log('Order placed............');
         Store.dispatch({
           type: SET_ORDER,
           payload: res.data.data,
         });
+        Store.dispatch({
+          type: UPDATES,
+          payload: Constants.UPDATE.ORDER_PLACED,
+        });
+        Store.dispatch({
+          type: PLACING_ORDER,
+          payload: false,
+        });
         orderChannel.on(`reject:order:${payload.id}`, payload => {
-          axios.get(`${Constants.BASE_URL}orders/${payload.id}`).then(res => {
-            Store.dispatch({
-              type: UPDATE_ORDER,
-              payload: res.data.data,
+          axios
+            .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
+            .then(res => {
+              Store.dispatch({
+                type: UPDATE_ORDER,
+                payload: res.data.data,
+              });
+              Store.dispatch({
+                type: UPDATES,
+                payload: Constants.UPDATE.ORDER_REJECTED,
+              });
             });
-          });
         });
         orderChannel.on(`approve:order:${res.payload.id}`, payload => {
-          axios.get(`${Constants.BASE_URL}orders/${payload.id}`).then(res => {
-            Store.dispatch({
-              type: UPDATE_ORDER,
-              payload: res.data.data,
+          axios
+            .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
+            .then(res => {
+              Store.dispatch({
+                type: UPDATE_ORDER,
+                payload: res.data.data,
+              });
+              Store.dispatch({
+                type: UPDATES,
+                payload: Constants.UPDATE.ORDER_APPROVED,
+              });
             });
-          });
         });
       })
-      .catch(err => console.log(JSON.stringify(err)));
+      .catch(err => console.log('HTTP ERROR..........', JSON.stringify(err)));
   });
 
   orderChannel.on('add:more:items', payload => {
-    axios.get(`${Constants.BASE_URL}orders/${payload.id}`).then(res => {
+    axios.get(`${Constants.BASE_URL}api/orders/${payload.id}`).then(res => {
       Store.dispatch({
         type: UPDATE_ORDER,
         payload: res.data.data,

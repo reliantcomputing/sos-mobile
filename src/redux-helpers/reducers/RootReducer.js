@@ -4,6 +4,7 @@ import {UserReducer} from './UserReducer';
 import {ChannelReducer} from './ChannelReducer';
 import {BasketReducer} from './BasketReducer';
 import {UpdateReducer} from './UpdateReducer';
+import {PlacingOrderReducer} from './PlacingOrderReducer';
 
 export const reducers = combineReducers({
   orders: OrdersReducer,
@@ -11,4 +12,5 @@ export const reducers = combineReducers({
   channels: ChannelReducer,
   basket: BasketReducer,
   update: UpdateReducer,
+  placing: PlacingOrderReducer,
 });

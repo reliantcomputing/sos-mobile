@@ -1,94 +1,126 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
+import {View, Text, Button, FlatList, StyleSheet} from 'react-native';
+import Constants from './helpers/constants';
+import ListCard from './components/ListCard';
+import {Header} from 'react-native-elements';
+import {useDispatch, useSelector} from 'react-redux';
+import {useTheme} from '@react-navigation/native';
+import PriceListCard from './components/PriceListCard';
+import {PLACING_ORDER} from './redux-helpers/Types';
 
-import {View, Text, StyleSheet} from 'react-native';
-
-import {useSelector} from 'react-redux';
+const axios = require('axios');
 
 export const Basket = () => {
   const basket = useSelector(state => state.basket);
+  const orderChannel = useSelector(state => state.channels.orderChannel);
+  const [menu, setMenu] = useState([]);
+  const [query, setQuery] = useState('');
+  const extras = useSelector(state => state.basket.extras);
+  const menus = useSelector(state => state.basket.menus);
+  const update = useSelector(state => state.basket.update);
+  const dispatch = useDispatch();
+  const placing = useSelector(state => state.placing);
 
-  console.log(basket);
+  const {colors} = useTheme();
+
+  useEffect(() => {
+    axios.get(`${Constants.BASE_URL}/api/menus`).then(res => {
+      setMenu(res.data.data);
+    });
+  }, []);
+
+  const renderFood = ({item}) => {
+    return <PriceListCard item={item} />;
+  };
 
   return (
     <View style={{flex: 1}}>
-      <Text style={{color: '#000000'}}>Hello</Text>
+      <Header
+        centerComponent={{text: 'Basket', style: {color: '#fff'}}}
+        backgroundColor="orange"
+        containerStyle={{
+          backgroundColor: 'orange',
+          justifyContent: 'space-around',
+        }}
+      />
+      <View style={{...styles.wrapper}}>
+        <Text
+          style={{
+            alignSelf: 'center',
+            marginVertical: 20,
+          }}>
+          Menu
+        </Text>
+        <FlatList
+          data={menus}
+          renderItem={renderFood}
+          contentContainerStyle={styles.list}
+          keyExtractor={item => item.id.toString()}
+        />
+        <Text
+          style={{
+            alignSelf: 'center',
+            marginVertical: 20,
+          }}>
+          Extras
+        </Text>
+        <FlatList
+          data={extras}
+          renderItem={renderFood}
+          contentContainerStyle={styles.list}
+          keyExtractor={item => item.id.toString()}
+        />
+      </View>
+      <View style={styles.itemContainer}>
+        <Button
+          style={{borderRadius: 50}}
+          onPress={() => {
+            dispatch({
+              type: PLACING_ORDER,
+              payload: true,
+            });
+            const order = {
+              ...basket,
+              sit_number: '1',
+              order: {rejected_reason: 'Tedd', status: 'PLACED'},
+            };
+            orderChannel.push(`place:order`, order);
+          }}
+          title={placing ? 'Placing order...' : 'Place order'}
+          color="orange"
+        />
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  headerButtonContainer: {
+    marginRight: 10,
+  },
+  itemContainer: {
+    marginBottom: 20,
+    marginHorizontal: 30,
+  },
   wrapper: {
     flex: 1,
-  },
-  addressSummaryContainer: {
-    flex: 2,
-    flexDirection: 'row',
-  },
-  addressContainer: {
     padding: 10,
   },
-  mapContainer: {
-    width: 125,
-    height: 125,
+  topWrapper: {
+    flexDirection: 'row',
   },
-  map: {
-    ...StyleSheet.absoluteFillObject,
+  textInputWrapper: {
+    flex: 4,
   },
-  addressText: {
-    fontSize: 16,
+  textInput: {
+    height: 35,
+    borderColor: '#5d5d5d',
+    borderWidth: 1,
   },
-  linkButtonContainer: {
-    marginTop: 10,
+  buttonWrapper: {
+    flex: 1,
   },
-  linkButton: {
-    color: '#0366d6',
-    fontSize: 13,
-    textDecorationLine: 'underline',
-  },
-  cartItemsContainer: {
-    flex: 5,
+  list: {
     marginTop: 20,
-  },
-  lowerContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  spacerBox: {
-    flex: 2,
-  },
-  cartItemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    padding: 10,
-  },
-  paymentSummaryContainer: {
-    flex: 2,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginRight: 20,
-  },
-  endLabelContainer: {
-    alignItems: 'flex-end',
-  },
-  price: {
-    fontSize: 17,
-    fontWeight: 'bold',
-  },
-  priceLabel: {
-    fontSize: 16,
-  },
-  messageBox: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4c90d4',
-  },
-  messageBoxText: {
-    fontSize: 18,
-    color: '#fff',
-  },
-  buttonContainer: {
-    flex: 1,
-    padding: 20,
   },
 });

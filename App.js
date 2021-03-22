@@ -24,7 +24,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainScreen from './src/MainScreen';
 import {RouteNames} from './src/helpers/RouteNames';
 import {createStackNavigator} from '@react-navigation/stack';
-import {MenuDetails} from './src/MenuDetails';
+import {ItemDetails} from './src/ItemDetails';
 import {lightTheme} from './src/theme/light';
 
 const Stack = createStackNavigator();
@@ -47,7 +47,10 @@ const App = () => {
           />
           <Stack.Screen
             name={RouteNames.MENU_DETAILS}
-            component={MenuDetails}
+            component={ItemDetails}
+            options={({route}) => ({
+              title: route.params.title,
+            })}
           />
         </Stack.Navigator>
       </NavigationContainer>

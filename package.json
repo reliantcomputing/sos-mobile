@@ -22,6 +22,7 @@
     "react-native-fast-image": "^8.3.4",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-gifted-chat": "^0.16.3",
+    "react-native-input-credit-card": "^0.5.5",
     "react-native-reanimated": "^2.0.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-scalable-image": "^1.1.0",
