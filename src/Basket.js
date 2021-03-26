@@ -130,13 +130,7 @@ export const Basket = () => {
           <Button
             style={{borderRadius: 50}}
             onPress={() => {
-              const payload = {
-                rejected: false,
-                status: Constants.ORDER_STATUS.PAID,
-              };
-              console.log(payload);
-              orderChannel.push(`pay:order:${order.id}`, payload);
-              // navigation.navigate(RouteNames.PAYMENT);
+              navigation.navigate(RouteNames.PAYMENT);
             }}
             title={'Pay'}
             color="orange"

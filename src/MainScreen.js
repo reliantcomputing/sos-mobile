@@ -64,13 +64,14 @@ const MainScreen = () => {
         type: UPDATES,
         payload: '',
       });
-    } else if (update === Constants.UPDATE.ORDER_PAID) {
-      alert('Your has been paid successfully.');
-      dispatch({
-        type: UPDATES,
-        payload: '',
-      });
     }
+    // else if (update === Constants.UPDATE.ORDER_PAID) {
+    //   alert('Your has been paid successfully.');
+    //   dispatch({
+    //     type: UPDATES,
+    //     payload: '',
+    //   });
+    // }
   }, [update]);
 
   return (

@@ -1,44 +1,50 @@
 import React, {useEffect, useState} from 'react';
-import {FormProvider, useForm} from 'react-hook-form';
-import {
-  Alert,
-  StyleSheet,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-} from 'react-native';
-import LottieView from 'lottie-react-native';
-import CreditCardForm, {Button} from 'rn-credit-card';
+import {Alert, Button, StyleSheet, View} from 'react-native';
 import {useSelector} from 'react-redux';
 import {useNavigation} from '@react-navigation/core';
+import {Input} from 'react-native-elements';
+import Constants from './helpers/constants';
 
 export const Payment = () => {
   const order = useSelector(state => state.order);
   const [price, setPrice] = useState(0);
-  const navigation = useNavigation();
   const orderChannel = useSelector(state => state.channels.orderChannel);
-  const formMethods = useForm({
-    // to trigger the validation on the blur event
-    mode: 'onBlur',
-    defaultValues: {
-      holderName: '',
-      cardNumber: '',
-      expiration: '',
-      cvv: '',
-    },
-  });
-  const {handleSubmit, formState} = formMethods;
 
-  function onSubmit(model) {
-    console.log('Button clicked');
-    const payload = {
-      rejected: false,
-      status: Constants.ORDER_STATUS.PAID,
-    };
-    orderChannel.push(`pay:order:${order.id}`, payload);
-    // Alert.alert('Success: ' + JSON.stringify(model, null, 2));
-    // navigation.goBack();
-  }
+  const [cardNumber, setCardNumber] = useState('');
+  const [cardHolder, setCardHolder] = useState('');
+  const [expiry, setExpiry] = useState('');
+  const [cvc, setCvc] = useState('');
+
+  const navigation = useNavigation();
+
+  const alert = message => {
+    Alert.alert(
+      'Error',
+      message,
+      [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
+
+  const update = message =>
+    Alert.alert(
+      'Success',
+      message,
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ],
+      {cancelable: false},
+    );
 
   useEffect(() => {
     console.log(order);
@@ -55,44 +61,43 @@ export const Payment = () => {
   }, []);
 
   return (
-    <FormProvider {...formMethods}>
-      <SafeAreaView style={styles.container}>
-        <KeyboardAvoidingView
-          style={styles.avoider}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-          <CreditCardForm
-            LottieView={LottieView}
-            horizontalStart
-            overrides={{
-              labelText: {
-                marginTop: 16,
-              },
-            }}
-          />
-        </KeyboardAvoidingView>
-        {formState.isValid && (
-          <Button
-            style={styles.button}
-            title={`${'CONFIRM PAYMENT'} R${price}`}
-            onPress={handleSubmit(onSubmit)}
-          />
-        )}
-      </SafeAreaView>
-    </FormProvider>
+    <View style={{flex: 1}}>
+      <Input
+        autoFocus
+        placeholder="CARD NUMBER"
+        value={cardNumber}
+        onChangeText={setCardNumber}
+      />
+      <Input
+        placeholder="CARD HOLDER"
+        value={cardHolder}
+        onChangeText={setCardHolder}
+      />
+      <Input placeholder="EXPIRY" value={expiry} onChangeText={setExpiry} />
+      <Input placeholder="CVC" value={cvc} onChangeText={setCvc} />
+      <View style={{marginHorizontal: 30}}>
+        <Button
+          style={{marginHorizontal: 30}}
+          title={`PAY NOW R${price}`}
+          onPress={() => {
+            if (
+              cardNumber == '' ||
+              cardHolder == '' ||
+              expiry == '' ||
+              cvc == ''
+            ) {
+              alert('Make sure all fields have values');
+            } else {
+              const payload = {
+                rejected: false,
+                status: Constants.ORDER_STATUS.PAID,
+              };
+              orderChannel.push(`pay:order:${order.id}`, payload);
+              update('Paid successfully. Thank you for choosing us.');
+            }
+          }}
+        />
+      </View>
+    </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  avoider: {
-    flex: 1,
-    padding: 36,
-  },
-  button: {
-    margin: 36,
-    marginTop: 0,
-    backgroundColor: 'orange',
-  },
-});
