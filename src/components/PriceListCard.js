@@ -43,7 +43,16 @@ const PriceListCard = ({item, type}) => {
       }}>
       <View style={styles.wrapper}>
         <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={require('../assets/image.jpg')} />
+          <Image
+            style={styles.image}
+            source={{
+              uri: item.image
+                ? item.image
+                : item.extra
+                ? item.extra.image
+                : item.menu.image,
+            }}
+          />
         </View>
         <View>
           <Text style={styles.title}>{title}</Text>
@@ -74,9 +83,11 @@ const PriceListCard = ({item, type}) => {
                   Removing?
                 </Text>
                 <Text style={{...styles.modalText, color: 'black'}}>
-                  {item.title.length <= 95
+                  {item.title
                     ? item.title
-                    : item.title.substring(0, 95) + '...'}
+                    : item.extra
+                    ? item.extra.title
+                    : item.menu.title}
                 </Text>
                 <View
                   style={{

@@ -82,11 +82,11 @@ const MainScreen = () => {
             let iconName;
 
             if (route.name === RouteNames.MENU) {
-              iconName = 'home-outline';
+              iconName = 'gift-outline';
             } else if (route.name === RouteNames.CHATS) {
               iconName = 'mail-outline';
             } else if (route.name === RouteNames.EXTRAS) {
-              iconName = 'notifications-outline';
+              iconName = 'pizza-outline';
             } else if (route.name === RouteNames.BASKET) {
               iconName = 'cart-outline';
             }

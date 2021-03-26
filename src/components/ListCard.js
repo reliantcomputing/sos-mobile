@@ -25,7 +25,7 @@ const ListCard = ({item, item_type}) => {
       }}>
       <View style={styles.wrapper}>
         <View style={styles.imageWrapper}>
-          <Image style={styles.image} source={require('../assets/image.jpg')} />
+          <Image style={styles.image} source={{uri: item.image}} />
         </View>
         <View>
           <Text style={styles.title}>{item.title}</Text>

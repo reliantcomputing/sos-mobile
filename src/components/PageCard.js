@@ -29,7 +29,7 @@ const PageCard = ({item, qty, qtyChanged, addToCart, items}) => {
   };
   return (
     <View style={styles.wrapper}>
-      <Image style={styles.image} source={{uri: Image.image}} />
+      <Image style={styles.image} source={{uri: item.image}} />
 
       <View style={styles.smallItemContainer}>
         <Text style={styles.mainText}>{item.title}</Text>
