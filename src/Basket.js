@@ -28,6 +28,8 @@ export const Basket = () => {
     return <PriceListCard item={item} type={type} />;
   };
 
+  console.log(order);
+
   return (
     <View style={{flex: 1}}>
       <Header
@@ -107,7 +109,18 @@ export const Basket = () => {
       )}
       {order.status === Constants.ORDER_STATUS.REJECTED && (
         <View>
-          <Badge status="error" value={Constants.ORDER_STATUS.REJECTED} />
+          <Badge
+            badgeStyle={{
+              paddingHorizontal: 30,
+              paddingBottom: 2,
+              marginBottom: 8,
+            }}
+            status="error"
+            value={Constants.ORDER_STATUS.REJECTED}
+          />
+          <Text style={{marginBottom: 3, alignSelf: 'center', color: 'black'}}>
+            {order.rejected_reason}
+          </Text>
         </View>
       )}
 
