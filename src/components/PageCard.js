@@ -48,8 +48,8 @@ const PageCard = ({item, qty, qtyChanged, addToCart, items}) => {
             addToCart(item, qty);
           }}
           title={
-            items.find(_item => _item.id === item.id)
-              ? 'Update Menu'
+            items.find(_item => _item.title === item.title)
+              ? 'Update Item'
               : 'Add to Basket'
           }
           color="orange"

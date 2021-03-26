@@ -7,6 +7,10 @@ import {
   LOAD_CHANNELS,
   UPDATES,
   UPDATE_ORDER,
+  SET_ORDER,
+  CREATE_PENDING_CHAT,
+  RESET_BASKET,
+  CREATE_CHAT,
 } from '../Types';
 
 const url = Constants.SOCKET_URL;
@@ -22,18 +26,10 @@ export const joinChannels = () => {
 
   orderChannel.on('place:order', payload => {
     console.log('Order placed');
-    Store.dispatch({
-      type: UPDATES,
-      payload: Constants.UPDATE.ORDER_PLACED,
-    });
-    Store.dispatch({
-      type: PLACING_ORDER,
-      payload: false,
-    });
     axios
       .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
       .then(res => {
-        console.log('Order placed............');
+        console.log('Order placed............', res.data.data);
         Store.dispatch({
           type: SET_ORDER,
           payload: res.data.data,
@@ -46,36 +42,51 @@ export const joinChannels = () => {
           type: PLACING_ORDER,
           payload: false,
         });
-        orderChannel.on(`reject:order:${payload.id}`, payload => {
-          axios
-            .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
-            .then(res => {
-              Store.dispatch({
-                type: UPDATE_ORDER,
-                payload: res.data.data,
-              });
-              Store.dispatch({
-                type: UPDATES,
-                payload: Constants.UPDATE.ORDER_REJECTED,
-              });
-            });
-        });
-        orderChannel.on(`approve:order:${res.payload.id}`, payload => {
-          axios
-            .get(`${Constants.BASE_URL}api/orders/${payload.id}`)
-            .then(res => {
-              Store.dispatch({
-                type: UPDATE_ORDER,
-                payload: res.data.data,
-              });
-              Store.dispatch({
-                type: UPDATES,
-                payload: Constants.UPDATE.ORDER_APPROVED,
-              });
-            });
-        });
       })
       .catch(err => console.log('HTTP ERROR..........', JSON.stringify(err)));
+
+    orderChannel.on(`reject:order:${payload.id}`, payload => {
+      axios.get(`${Constants.BASE_URL}api/orders/${payload.id}`).then(res => {
+        Store.dispatch({
+          type: UPDATE_ORDER,
+          payload: res.data.data,
+        });
+        Store.dispatch({
+          type: UPDATES,
+          payload: Constants.UPDATE.ORDER_REJECTED,
+        });
+      });
+    });
+
+    orderChannel.on(`pay:order:${payload.id}`, payload => {
+      axios.get(`${Constants.BASE_URL}api/orders/${payload.id}`).then(res => {
+        Store.dispatch({
+          type: UPDATE_ORDER,
+          payload: {},
+        });
+        Store.dispatch({
+          type: RESET_BASKET,
+          payload: {},
+        });
+        Store.dispatch({
+          type: UPDATES,
+          payload: Constants.UPDATE.ORDER_PAID,
+        });
+      });
+    });
+
+    orderChannel.on(`approve:order:${payload.id}`, payload => {
+      axios.get(`${Constants.BASE_URL}api/orders/${payload.id}`).then(res => {
+        Store.dispatch({
+          type: UPDATE_ORDER,
+          payload: res.data.data,
+        });
+        Store.dispatch({
+          type: UPDATES,
+          payload: Constants.UPDATE.ORDER_APPROVED,
+        });
+      });
+    });
   });
 
   orderChannel.on('add:more:items', payload => {
@@ -106,19 +117,29 @@ export const joinChannels = () => {
   //   });
   // });
 
-  chatChannel.on('', payload => {
-    if (user.id === payload.userId) {
+  chatChannel.on('create:chat', payload => {
+    Store.dispatch({
+      type: CREATE_PENDING_CHAT,
+      payload: payload,
+    });
+  });
+
+  chatChannel.on('accept:chat', payload => {
+    Store.dispatch({
+      type: CREATE_CHAT,
+      payload: payload.chat,
+    });
+    chatChannel.on(`send:message:${payload.chatId}`, payload => {
+      console.log('Payload', payload);
       Store.dispatch({
-        type: ADD_PENDING_CHATS,
-        payload: payload,
+        type: ADD_MESSAGE,
+        payload,
       });
-    }
+    });
   });
 
   chatChannel.join();
   orderChannel.join();
-
-  console.log(orderChannel);
 
   return {
     type: LOAD_CHANNELS,

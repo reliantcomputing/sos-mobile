@@ -26,6 +26,7 @@ import {RouteNames} from './src/helpers/RouteNames';
 import {createStackNavigator} from '@react-navigation/stack';
 import {ItemDetails} from './src/ItemDetails';
 import {lightTheme} from './src/theme/light';
+import {Payment} from './src/Payment';
 
 const Stack = createStackNavigator();
 
@@ -51,6 +52,13 @@ const App = () => {
             options={({route}) => ({
               title: route.params.title,
             })}
+          />
+          <Stack.Screen
+            name={RouteNames.PAYMENT}
+            component={Payment}
+            // options={({route}) => ({
+            //   title: route.params.title,
+            // })}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -12,7 +12,6 @@ export const ItemDetails = ({route}) => {
   const item_type = route.params.item_type;
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
-  console.log(useSelector(state => state.channels));
 
   const basketButton = <Button />;
 

@@ -8,4 +8,6 @@ export const RouteNames = {
   EXTRA_DETAILS: 'Extra Details',
   BUSKET_DETAILS: 'Extra Details',
   BASKET: 'Basket',
+  ORDER: 'Order',
+  PAYMENT: 'Payment',
 };

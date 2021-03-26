@@ -29,23 +29,18 @@ export const Menu = () => {
 
   return (
     <View style={{flex: 1}}>
-      <Header centerComponent={{text: 'MENU', style: {color: '#fff'}}} />
+      <Header
+        centerComponent={{
+          text: `MENU(${menu.length})`,
+          style: {color: '#fff', fontSize: 20, fontWeight: 'bold'},
+        }}
+        backgroundColor="orange"
+        containerStyle={{
+          backgroundColor: 'orange',
+          justifyContent: 'space-around',
+        }}
+      />
       <View style={{...styles.wrapper}}>
-        <View style={styles.topWrapper}>
-          <View style={styles.textInputWrapper}>
-            <TextInput
-              style={styles.textInput}
-              onChangeText={() => {}}
-              value={query}
-              placeholder={'What are you craving for?'}
-            />
-          </View>
-
-          <View style={styles.buttonWrapper}>
-            <Button onPress={() => {}} title="Go" color="#c53c3c" />
-          </View>
-        </View>
-
         <FlatList
           data={menu}
           renderItem={renderFood}

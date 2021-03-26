@@ -5,6 +5,7 @@ const Constants = {
     REJECTED: 'REJECTED',
     PLACED: 'PLACED',
     APPROVED: 'APPROVED',
+    PAID: 'PAID',
   },
   UPDATE: {
     ORDER_ADDED: 'ORDER_ADDED',
@@ -12,6 +13,7 @@ const Constants = {
     ORDER_APPROVED: 'ORDER_APPROVED',
     ORDER_REJECTED: 'ORDER_REJECTED',
     ORDER_PLACED: 'ORDER_PLACED',
+    ORDER_PAID: 'ORDER_PAID',
   },
 };
 

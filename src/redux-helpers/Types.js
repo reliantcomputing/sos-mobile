@@ -10,7 +10,8 @@ export const REMOVE_MENU = 'REMOVE_MENU';
 export const ADD_MENU = 'ADD_MENU';
 
 export const CREATE_CHAT = 'CREATE_CHAT';
-export const ADD_MESSAGE = 'ADD_PENDING_CHAT';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const CREATE_PENDING_CHAT = 'CREATE_PENDING_CHAT';
 
 export const LOAD_CHANNELS = 'LOAD_CHANNELS';
 
@@ -24,3 +25,5 @@ export const BASKET_ADD_MENU = 'BASKET_ADD_MENU';
 export const BASKET_REMOVE_MENU = 'BASKET_REMOVE_MENU';
 export const UPDATES = 'UPDATES';
 export const PLACING_ORDER = 'PLACING_ORDER';
+export const PAYMENT = 'PAYMENT';
+export const RESET_BASKET = 'RESET_BASKET';

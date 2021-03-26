@@ -2,7 +2,7 @@ import React, {Fragment, useEffect} from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
-import {StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
+import {Alert} from 'react-native';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {RouteNames} from './helpers/RouteNames';
@@ -22,6 +22,7 @@ const axios = require('axios');
 
 const MainScreen = () => {
   const basket = useSelector(state => state.basket);
+  const order = useSelector(state => state.order);
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
   const update = useSelector(state => state.update);
@@ -63,6 +64,12 @@ const MainScreen = () => {
         type: UPDATES,
         payload: '',
       });
+    } else if (update === Constants.UPDATE.ORDER_PAID) {
+      alert('Your has been paid successfully.');
+      dispatch({
+        type: UPDATES,
+        payload: '',
+      });
     }
   }, [update]);
 
@@ -81,7 +88,7 @@ const MainScreen = () => {
             } else if (route.name === RouteNames.EXTRAS) {
               iconName = 'notifications-outline';
             } else if (route.name === RouteNames.BASKET) {
-              iconName = 'notifications-outline';
+              iconName = 'cart-outline';
             }
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
