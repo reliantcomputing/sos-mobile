@@ -129,8 +129,8 @@ export const joinChannels = () => {
       type: CREATE_CHAT,
       payload: payload.chat,
     });
-    chatChannel.on(`send:message:${payload.chatId}`, payload => {
-      console.log('Payload', payload);
+    chatChannel.on(`send:message:${payload.chat.id}`, payload => {
+      console.log('Payload.....Message', payload);
       Store.dispatch({
         type: ADD_MESSAGE,
         payload,

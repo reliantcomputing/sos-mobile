@@ -82,23 +82,27 @@ export const Basket = () => {
       </View>
       {!!!order.id && (
         <View style={styles.itemContainer}>
-          <Button
-            style={{borderRadius: 50}}
-            onPress={() => {
-              dispatch({
-                type: PLACING_ORDER,
-                payload: true,
-              });
-              const order = {
-                ...basket,
-                sit_number: '1',
-                order: {status: 'PLACED'},
-              };
-              orderChannel.push(`place:order`, order);
-            }}
-            title={placing ? 'Placing order...' : 'Place order'}
-            color="orange"
-          />
+          {basket.extras.length > 0 || basket.menus.length > 0 ? (
+            <Button
+              style={{borderRadius: 50}}
+              onPress={() => {
+                dispatch({
+                  type: PLACING_ORDER,
+                  payload: true,
+                });
+                const order = {
+                  ...basket,
+                  sit_number: '1',
+                  order: {status: 'PLACED'},
+                };
+                orderChannel.push(`place:order`, order);
+              }}
+              title={placing ? 'Placing order...' : 'Place order'}
+              color="orange"
+            />
+          ) : (
+            <Text style={{alignSelf: 'center'}}>Not items</Text>
+          )}
         </View>
       )}
       {order.status === Constants.ORDER_STATUS.REJECTED && (
@@ -109,7 +113,15 @@ export const Basket = () => {
 
       {order.status === Constants.ORDER_STATUS.PLACED && (
         <View>
-          <Badge status="warning" value={Constants.ORDER_STATUS.PLACED} />
+          <Badge
+            badgeStyle={{
+              paddingHorizontal: 30,
+              paddingBottom: 2,
+              marginBottom: 8,
+            }}
+            status="warning"
+            value={Constants.ORDER_STATUS.PLACED}
+          />
         </View>
       )}
 

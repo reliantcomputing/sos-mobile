@@ -41,12 +41,12 @@ export const BasketReducer = (state = {extras: [], menus: []}, action) => {
     case BASKET_REMOVE_MENU:
       return {
         ...state,
-        menus: state.menus.filter(_m => _menu.id !== action.payload),
+        menus: state.menus.filter(_m => _m.title !== action.payload),
       };
     case BASKET_REMOVE_EXTRA:
       return {
         ...state,
-        extras: state.extras.filter(_e => _e.id !== action.payload),
+        extras: state.extras.filter(_e => _e.title !== action.payload),
       };
     case RESET_BASKET:
       const new_state = {extras: [], menus: []};

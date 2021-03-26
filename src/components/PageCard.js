@@ -1,13 +1,32 @@
 import React from 'react';
-import {View, Text, Image, Button, Dimensions, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  Image,
+  Button,
+  Dimensions,
+  StyleSheet,
+  Alert,
+} from 'react-native';
 
 import {SimpleStepper} from 'react-native-simple-stepper';
-import {useDispatch, useSelector} from 'react-redux';
-import {PLACING_ORDER} from '../redux-helpers/Types';
 const screenWidth = Dimensions.get('window').width;
 
 const PageCard = ({item, qty, qtyChanged, addToCart, items}) => {
   const {id, image, price} = item;
+  const alert = message => {
+    Alert.alert(
+      'Success',
+      message,
+      [
+        {
+          text: 'OK',
+          onPress: () => {},
+        },
+      ],
+      {cancelable: false},
+    );
+  };
   return (
     <View style={styles.wrapper}>
       <Image style={styles.image} source={{uri: Image.image}} />
@@ -46,6 +65,10 @@ const PageCard = ({item, qty, qtyChanged, addToCart, items}) => {
         <Button
           onPress={() => {
             addToCart(item, qty);
+            const _message = items.find(_item => _item.title === item.title)
+              ? 'Item updated successfully:). Please check your basket'
+              : 'Item added to the basket successfully:). please check your basket';
+            alert(_message);
           }}
           title={
             items.find(_item => _item.title === item.title)

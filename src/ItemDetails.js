@@ -8,10 +8,12 @@ import {Header, Button} from 'react-native-elements';
 
 export const ItemDetails = ({route}) => {
   const menu = route.params.item;
-  const items = route.params.items;
   const item_type = route.params.item_type;
   const [qty, setQty] = useState(1);
   const dispatch = useDispatch();
+
+  const extras = useSelector(state => state.basket.extras);
+  const menus = useSelector(state => state.basket.menus);
 
   const basketButton = <Button />;
 
@@ -41,7 +43,7 @@ export const ItemDetails = ({route}) => {
       <PageCard
         item={menu}
         qty={qty}
-        items={items}
+        items={item_type === 'MENU' ? menus : extras}
         qtyChanged={qtyChanged}
         addToCart={addToCart}
       />

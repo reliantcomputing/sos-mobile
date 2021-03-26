@@ -7,6 +7,7 @@ import {useSelector} from 'react-redux';
 export const Chats = () => {
   const [messages, setMessages] = useState([]);
   const chat = useSelector(state => state.chat);
+  const [chatId, setChatId] = useState(null);
   const chatChannel = useSelector(state => state.channels.chatChannel);
   const sit_number = useSelector(state => state.sit_number);
   const [text, setText] = useState('');
@@ -14,33 +15,11 @@ export const Chats = () => {
   console.log(chat);
 
   useEffect(() => {
-    setMessages([
-      {
-        _id: 2,
-        text: 'Hey Vhuyo, I am failing to understand why my order is rejected.',
-        createdAt: new Date(),
-        user: {
-          _id: 1,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-      {
-        _id: 1,
-        text: 'Hello, I am Tumisho. How can I assist you?',
-        createdAt: new Date(),
-        user: {
-          _id: 2,
-          name: 'React Native',
-          avatar: 'https://placeimg.com/140/140/any',
-        },
-      },
-    ]);
-  }, []);
+    setChatId(chat.id);
+  }, [chat]);
 
   const onSend = useCallback(message => {
-    console.log('Hello..............', chat.id);
-    chatChannel.push(`send:message:${chat.id}`, {
+    chatChannel.push(`send:message:${chatId}`, {
       seen: false,
       user_id: sit_number,
       text: message[0].text,
