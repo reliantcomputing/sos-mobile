@@ -15,11 +15,13 @@ export const Chats = () => {
   console.log(chat);
 
   useEffect(() => {
+    console.log('kkkkkkkkk', chat);
     setChatId(chat.id);
   }, [chat]);
 
   const onSend = useCallback(message => {
-    chatChannel.push(`send:message:${chatId}`, {
+    console.log('kkkkkkkkk', chatId);
+    chatChannel.push(`send:message:${15}`, {
       seen: false,
       user_id: sit_number,
       text: message[0].text,

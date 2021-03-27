@@ -3,7 +3,6 @@ import Store from '../Store';
 import Constants from '../../helpers/constants';
 import {
   PLACING_ORDER,
-  ADD_PENDING_CHATS,
   LOAD_CHANNELS,
   UPDATES,
   UPDATE_ORDER,
@@ -11,6 +10,7 @@ import {
   CREATE_PENDING_CHAT,
   RESET_BASKET,
   CREATE_CHAT,
+  ADD_MESSAGE,
 } from '../Types';
 
 const url = Constants.SOCKET_URL;
@@ -33,6 +33,10 @@ export const joinChannels = () => {
         Store.dispatch({
           type: SET_ORDER,
           payload: res.data.data,
+        });
+        Store.dispatch({
+          type: RESET_BASKET,
+          payload: {},
         });
         Store.dispatch({
           type: UPDATES,

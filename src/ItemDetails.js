@@ -3,7 +3,11 @@ import {ScrollView} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import PageCard from './components/PageCard';
 import Constants from './helpers/constants';
-import {BASKET_ADD_EXTRA, BASKET_ADD_MENU} from './redux-helpers/Types';
+import {
+  BASKET_ADD_EXTRA,
+  BASKET_ADD_MENU,
+  SET_ORDER,
+} from './redux-helpers/Types';
 import {Header, Button} from 'react-native-elements';
 
 export const ItemDetails = ({route}) => {
@@ -14,6 +18,7 @@ export const ItemDetails = ({route}) => {
 
   const extras = useSelector(state => state.basket.extras);
   const menus = useSelector(state => state.basket.menus);
+  const order = useSelector(state => state.order);
 
   const basketButton = <Button />;
 
@@ -35,6 +40,14 @@ export const ItemDetails = ({route}) => {
         type: BASKET_ADD_EXTRA,
         payload: item,
       });
+    }
+    if (order.id) {
+      if (order.rejected) {
+        dispatch({
+          type: SET_ORDER,
+          payload: {},
+        });
+      }
     }
   };
 
