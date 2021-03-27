@@ -1,6 +1,6 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import {GiftedChat} from 'react-native-gifted-chat';
-import {View, Button} from 'react-native';
+import {View, Button, Text} from 'react-native';
 import {Header} from 'react-native-elements';
 import {useSelector} from 'react-redux';
 
@@ -12,22 +12,20 @@ export const Chats = () => {
   const sit_number = useSelector(state => state.sit_number);
   const [text, setText] = useState('');
 
-  console.log(chat);
+  console.log('Outside ..........', chat);
 
-  useEffect(() => {
-    console.log('kkkkkkkkk', chat);
-    setChatId(chat.id);
-  }, [chat]);
-
-  const onSend = useCallback(message => {
-    console.log('kkkkkkkkk', chatId);
-    chatChannel.push(`send:message:${15}`, {
-      seen: false,
-      user_id: sit_number,
-      text: message[0].text,
-      message_from: 'CUSTOMER',
-    });
-  }, []);
+  const onSend = useCallback(
+    message => {
+      console.log('kkkkkkkkk', chat);
+      chatChannel.push(`send:message:${chat.id}`, {
+        seen: false,
+        user_id: sit_number,
+        text: message[0].text,
+        message_from: 'CUSTOMER',
+      });
+    },
+    [chat],
+  );
 
   return (
     <View style={{flex: 1}}>
@@ -44,6 +42,7 @@ export const Chats = () => {
       />
       {chat.id ? (
         <GiftedChat
+          inverted={false}
           messages={chat.messages}
           text={text}
           onInputTextChanged={text => setText(text)}
@@ -52,6 +51,12 @@ export const Chats = () => {
             _id: 0,
           }}
         />
+      ) : chat.waiting ? (
+        <View style={{marginHorizontal: 50, marginVertical: 50}}>
+          <Text style={{alignSelf: 'center'}}>
+            Please wait, one of our assistants will attend asap.
+          </Text>
+        </View>
       ) : (
         <View style={{marginHorizontal: 50, marginVertical: 50}}>
           <Button
